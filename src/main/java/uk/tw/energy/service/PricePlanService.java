@@ -1,5 +1,6 @@
 package uk.tw.energy.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
@@ -13,16 +14,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 @Service
 public class PricePlanService {
 
-    private final List<PricePlan> pricePlans;
-    private final MeterReadingService meterReadingService;
+	@Autowired
+    private  List<PricePlan> pricePlans;
+	
+	@Autowired
+    private  MeterReadingService meterReadingService;
 
-    public PricePlanService(List<PricePlan> pricePlans, MeterReadingService meterReadingService) {
-        this.pricePlans = pricePlans;
-        this.meterReadingService = meterReadingService;
-    }
+//    public PricePlanService(List<PricePlan> pricePlans, MeterReadingService meterReadingService) {
+//        this.pricePlans = pricePlans;
+//        this.meterReadingService = meterReadingService;
+//    }
 
     public Optional<Map<String, BigDecimal>> getConsumptionCostOfElectricityReadingsForEachPricePlan(String smartMeterId) {
         Optional<List<ElectricityReading>> electricityReadings = meterReadingService.getReadings(smartMeterId);
@@ -52,14 +58,13 @@ public class PricePlanService {
     }
 
     private BigDecimal calculateTimeElapsed(List<ElectricityReading> electricityReadings) {
-        ElectricityReading first = electricityReadings.stream()
-                .min(Comparator.comparing(ElectricityReading::getTime))
-                .get();
-        ElectricityReading last = electricityReadings.stream()
-                .max(Comparator.comparing(ElectricityReading::getTime))
-                .get();
-
-        return BigDecimal.valueOf(Duration.between(first.getTime(), last.getTime()).getSeconds() / 3600.0);
+	        ElectricityReading first = electricityReadings.stream()
+	                .min(Comparator.comparing(ElectricityReading::getTime))
+	                .get();
+	        ElectricityReading last = electricityReadings.stream()
+	                .max(Comparator.comparing(ElectricityReading::getTime))
+	                .get();
+	    return BigDecimal.valueOf(Duration.between(first.getTime(), last.getTime()).getSeconds() / 3600.0);
     }
 
 }

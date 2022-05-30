@@ -2,6 +2,7 @@ package uk.tw.energy.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.tw.energy.builders.MeterReadingsBuilder;
 import uk.tw.energy.domain.ElectricityReading;
@@ -18,14 +19,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class MeterReadingControllerTest {
 
     private static final String SMART_METER_ID = "10101010";
+    
+    @Autowired
     private MeterReadingController meterReadingController;
+    
+    @Autowired
     private MeterReadingService meterReadingService;
 
-    @BeforeEach
-    public void setUp() {
-        this.meterReadingService = new MeterReadingService(new HashMap<>());
-        this.meterReadingController = new MeterReadingController(meterReadingService);
-    }
+//    @BeforeEach
+//    public void setUp() {
+//        this.meterReadingService = new MeterReadingService(new HashMap<>());
+//        this.meterReadingController = new MeterReadingController(meterReadingService);
+//    }
 
     @Test
     public void givenNoMeterIdIsSuppliedWhenStoringShouldReturnErrorResponse() {

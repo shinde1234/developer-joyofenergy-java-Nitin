@@ -1,5 +1,6 @@
 package uk.tw.energy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,24 +13,29 @@ import uk.tw.energy.service.PricePlanService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 @RestController
 @RequestMapping("/price-plans")
 public class PricePlanComparatorController {
 
-    public final static String PRICE_PLAN_ID_KEY = "pricePlanId";
-    public final static String PRICE_PLAN_COMPARISONS_KEY = "pricePlanComparisons";
-    private final PricePlanService pricePlanService;
-    private final AccountService accountService;
+    public static final String PRICE_PLAN_ID_KEY = "pricePlanId";
+    public static final String PRICE_PLAN_COMPARISONS_KEY = "pricePlanComparisons";
+    
+    @Autowired
+    private PricePlanService pricePlanService;
+    
+    @Autowired
+    private AccountService accountService;
 
-    public PricePlanComparatorController(PricePlanService pricePlanService, AccountService accountService) {
-        this.pricePlanService = pricePlanService;
-        this.accountService = accountService;
-    }
+    
+//    public PricePlanComparatorController(PricePlanService pricePlanService, AccountService accountService) {
+//        this.pricePlanService = pricePlanService;
+//        this.accountService = accountService;
+//    }
 
     @GetMapping("/compare-all/{smartMeterId}")
     public ResponseEntity<Map<String, Object>> calculatedCostForEachPricePlan(@PathVariable String smartMeterId) {
@@ -41,13 +47,15 @@ public class PricePlanComparatorController {
             return ResponseEntity.notFound().build();
         }
 
-        Map<String, Object> pricePlanComparisons = new HashMap<>();
+        Map<String, Object> pricePlanComparisons = new TreeMap<>();
         pricePlanComparisons.put(PRICE_PLAN_ID_KEY, pricePlanId);
         pricePlanComparisons.put(PRICE_PLAN_COMPARISONS_KEY, consumptionsForPricePlans.get());
-
-        return consumptionsForPricePlans.isPresent()
-                ? ResponseEntity.ok(pricePlanComparisons)
-                : ResponseEntity.notFound().build();
+        
+//        return consumptionsForPricePlans.isPresent()
+//                ? ResponseEntity.ok(pricePlanComparisons)
+//                : ResponseEntity.notFound().build();
+        
+        return ResponseEntity.ok(pricePlanComparisons);
     }
 
     @GetMapping("/recommend/{smartMeterId}")

@@ -1,5 +1,6 @@
 package uk.tw.energy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,12 @@ import java.util.Optional;
 @RequestMapping("/readings")
 public class MeterReadingController {
 
-    private final MeterReadingService meterReadingService;
+	@Autowired
+    private MeterReadingService meterReadingService;
 
-    public MeterReadingController(MeterReadingService meterReadingService) {
-        this.meterReadingService = meterReadingService;
-    }
+//    public MeterReadingController(MeterReadingService meterReadingService) {
+//        this.meterReadingService = meterReadingService;
+//    }
 
     @PostMapping("/store")
     public ResponseEntity storeReadings(@RequestBody MeterReadings meterReadings) {

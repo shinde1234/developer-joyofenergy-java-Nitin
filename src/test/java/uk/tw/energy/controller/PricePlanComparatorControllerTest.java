@@ -2,6 +2,7 @@ package uk.tw.energy.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
@@ -26,9 +27,13 @@ public class PricePlanComparatorControllerTest {
     private static final String PRICE_PLAN_2_ID = "best-supplier";
     private static final String PRICE_PLAN_3_ID = "second-best-supplier";
     private static final String SMART_METER_ID = "smart-meter-id";
+    
+    @Autowired
     private PricePlanComparatorController controller;
+    @Autowired
     private MeterReadingService meterReadingService;
-    private AccountService accountService;
+//    @Autowired
+//    private AccountService accountService;
 
     @BeforeEach
     public void setUp() {
@@ -38,13 +43,12 @@ public class PricePlanComparatorControllerTest {
         PricePlan pricePlan3 = new PricePlan(PRICE_PLAN_3_ID, null, BigDecimal.valueOf(2), null);
 
         List<PricePlan> pricePlans = Arrays.asList(pricePlan1, pricePlan2, pricePlan3);
-        PricePlanService tariffService = new PricePlanService(pricePlans, meterReadingService);
+        //PricePlanService tariffService = new PricePlanService(pricePlans, meterReadingService);
 
         Map<String, String> meterToTariffs = new HashMap<>();
         meterToTariffs.put(SMART_METER_ID, PRICE_PLAN_1_ID);
-        accountService = new AccountService(meterToTariffs);
-
-        controller = new PricePlanComparatorController(tariffService, accountService);
+        //accountService = new AccountService(meterToTariffs);
+        //controller = new PricePlanComparatorController(tariffService, accountService);
     }
 
     @Test

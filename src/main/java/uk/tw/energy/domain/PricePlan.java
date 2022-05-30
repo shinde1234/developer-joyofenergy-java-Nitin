@@ -26,7 +26,7 @@ public class PricePlan {
     public String getPlanName() {
         return planName;
     }
-
+    
     public BigDecimal getUnitRate() {
         return unitRate;
     }

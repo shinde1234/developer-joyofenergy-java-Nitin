@@ -1,24 +1,33 @@
 package uk.tw.energy.generator;
 
 import uk.tw.energy.domain.ElectricityReading;
+import uk.tw.energy.factory.ReadingRandomiserFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class ElectricityReadingsGenerator {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-    public List<ElectricityReading> generate(int number) {
+import ch.qos.logback.core.net.ssl.SecureRandomFactoryBean;
+
+@Component
+public class ElectricityReadingsGenerator {
+	
+	public List<ElectricityReading> generate(int number) {
         List<ElectricityReading> readings = new ArrayList<>();
         Instant now = Instant.now();
 
-        Random readingRandomiser = new Random();
+        //Random readingRandomiser = new Random();
         for (int i = 0; i < number; i++) {
-            double positiveRandomValue = Math.abs(readingRandomiser.nextGaussian());
+            double positiveRandomValue = Math.abs(ReadingRandomiserFactory.getReadingRandomiser().nextGaussian());
             BigDecimal randomReading = BigDecimal.valueOf(positiveRandomValue).setScale(4, RoundingMode.CEILING);
             ElectricityReading electricityReading = new ElectricityReading(now.minusSeconds(i * 10), randomReading);
             readings.add(electricityReading);

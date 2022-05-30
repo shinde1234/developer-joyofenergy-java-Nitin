@@ -2,6 +2,8 @@ package uk.tw.energy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +27,14 @@ public class SeedingApplicationDataConfiguration {
     private static final String RENEWABLES_PRICE_PLAN_ID = "price-plan-1";
     private static final String STANDARD_PRICE_PLAN_ID = "price-plan-2";
 
+	private ElectricityReadingsGenerator electricityReadingsGenerator; 
+    
+	@Autowired
+	public void setElectricityReadingsGenerator(ElectricityReadingsGenerator electricityReadingsGenerator) {
+		this.electricityReadingsGenerator = electricityReadingsGenerator;
+	}
+
+
     @Bean
     public List<PricePlan> pricePlans() {
         final List<PricePlan> pricePlans = new ArrayList<>();
@@ -37,7 +47,7 @@ public class SeedingApplicationDataConfiguration {
     @Bean
     public Map<String, List<ElectricityReading>> perMeterElectricityReadings() {
         final Map<String, List<ElectricityReading>> readings = new HashMap<>();
-        final ElectricityReadingsGenerator electricityReadingsGenerator = new ElectricityReadingsGenerator();
+        //final ElectricityReadingsGenerator electricityReadingsGenerator = new ElectricityReadingsGenerator();
         smartMeterToPricePlanAccounts()
                 .keySet()
                 .forEach(smartMeterId -> readings.put(smartMeterId, electricityReadingsGenerator.generate(20)));
